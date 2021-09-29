@@ -1,24 +1,51 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
 public class FaceCard extends Card {
 
+    enum Face{
+        JACK,
+        QUEEN,
+        KING
+    }
+
+    /**
+     * The face of the card
+     */
+    private Face face;
+
+    DrawingPanel panel;
     /**
      * Constructor For Face Card
      *
-     * @param g Graphics Object for where to draw the card
+     * @param panel Panel Object for where to draw the card and its image
      * @param cardNum The card value
      * @param suit The card suite
      */
-    public FaceCard(Graphics g, int cardNum, int suit){
+    public FaceCard(DrawingPanel panel , int cardNum, int suit){
+        super(panel.getGraphics(), cardNum, suit);
 
-        super(g, cardNum, suit);
+        this.panel = panel;
+        switch(cardNum){
+            case 11:
+                this.face = Face.JACK;
+                break;
+            case 12:
+                this.face = Face.QUEEN;
+                break;
+            case 13:
+                this.face = Face.KING;
+                break;
+        }
     }
 
     @Override
-    public void draw(int x, int y, int size) {
+    public void draw(int x, int y, int size) throws IOException {
         // base card
         g.setColor(Color.WHITE);
         g.fillRect(x, y, size, size / 2 * 3);
@@ -49,6 +76,28 @@ public class FaceCard extends Card {
         // draw the corresponding number of symbols on the card
         g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
 
+        // Draw letter above symbol
+        for (int i=0;i<=2;i++) {
+            g2.drawString(this.getLetter(), x+(size/13), y+(int)(size/5));
+            g2.setTransform(old);
+        }
 
+        // Read and write image
+        BufferedImage img = ImageIO.read(new File("king.png"));
+
+        g2.drawImage(img,x+10, y+10, size-20,(size / 2 * 3) -20, panel);
+    }
+
+    public String getLetter(){
+        switch(this.face){
+            case JACK:
+                return "J";
+            case QUEEN:
+                return "Q";
+            case KING:
+                return "K";
+            default:
+                return "X";
+        }
     }
 }
