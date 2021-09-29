@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.io.IOException;
 
 class Card {
 
@@ -27,7 +28,7 @@ class Card {
   }
 
   // draws the card at a given (x, y) and size
-  public void draw(int x, int y, int size) {
+  public void draw(int x, int y, int size) throws IOException {
     // base card
     g.setColor(Color.WHITE);
     g.fillRect(x, y, size, size / 2 * 3);

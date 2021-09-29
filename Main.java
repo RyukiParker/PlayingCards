@@ -1,14 +1,17 @@
 import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
 
 class Main {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
 
     // Initialize DrawingPanel and Graphics
-    DrawingPanel panel = new DrawingPanel(500, 410);
+    DrawingPanel panel = new DrawingPanel(700, 510);
     Graphics g = panel.getGraphics();
     panel.setBackground(Color.GRAY);
+
+    
 
     // Create deck
     Card[] deck = new Card[52];
@@ -19,6 +22,7 @@ class Main {
       }
       deck[i] = new Card(g, (i % 13) + 1, suit);
     }
+
     System.out.println(Arrays.asList(deck));
 
     // Draw cards on screen
@@ -33,6 +37,21 @@ class Main {
     }
     for(int c=39;c<45;c++) {
       deck[c].draw((c-39)*70, 310, 60);
+    }
+
+
+    // Draw face cards
+    for(int i=0;i<4;i++) {
+      FaceCard face = new FaceCard(panel,11,i);
+      face.draw(6*70, 10 +(i*100), 60);
+    }
+    for(int i=0;i<4;i++) {
+      FaceCard face = new FaceCard(panel,12,i);
+      face.draw(7*70,10 +(i*100), 60);
+    }
+    for(int i=0;i<4;i++) {
+      FaceCard face = new FaceCard(panel,13,i);
+      face.draw(8*70, 10 +(i*100), 60);
     }
   }
 }

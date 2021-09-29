@@ -1,0 +1,2 @@
+language = "java"
+run = "javac ./Main.java && java -classpath ./ Main"
