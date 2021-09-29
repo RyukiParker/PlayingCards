@@ -3,13 +3,15 @@ import java.awt.geom.AffineTransform;
 
 class Card {
 
-  Graphics g;
-  int cardNum;
-  String suit;
+  private Graphics g;
+  private int indexOfTheCard;
+  private String suit;
+  private final int HEIGHTOFTHECARD = 200;
+  private final int WIDTHOFTHECARD = 100;
 
-  public Card(Graphics g, int cardNum, int suit) {
+  public Card(Graphics g, int indexOfTheCard, int suit) {
     this.g = g;
-    this.cardNum = cardNum;
+    this.indexOfTheCard = indexOfTheCard;
     switch (suit) {
       // hearts
       case 0: this.suit = "\u2665";
@@ -27,216 +29,101 @@ class Card {
   }
 
   // draws the card at a given (x, y) and size
-  public void draw(int x, int y, int size) {
+  public void draw(int positionOfTheCardX, int positionOfTheCardY) {
     // base card
-    g.setColor(Color.WHITE);
-    g.fillRect(x, y, size, size / 2 * 3);
-    g.setColor(Color.BLACK);
-    g.drawRect(x, y, size, size / 2 * 3);
+	drawBaseOfTheCard(g, positionOfTheCardX, positionOfTheCardY);
+	
+	//set color
+	if (this.suit == "\u2665" || this.suit == "\u2666") 
+		g.setColor(Color.RED);
+	else 
+		g.setColor(Color.BLACK);
+	
+  g.setFont(new Font("Serif", Font.PLAIN, 17)); 
+  
+	//draw corners of the card
+	drawCornersOfTheCard(positionOfTheCardX, positionOfTheCardY);
 
-    // converting Graphics to Graphics2D
-    Graphics2D g2 = (Graphics2D)g;
-    // Creating an AffineTransform from g2
-    AffineTransform old = g2.getTransform();
-    // set font for corner suits and numbers
-    Font corner = new Font("Serif", Font.PLAIN, (size/6));
-    g2.setFont(corner);
-
-    if (suit == "\u2665" || suit == "\u2666") {
-      g2.setColor(Color.RED);
-    } else {
-      g2.setColor(Color.BLACK);
-    }
-
-    // draw the corresponding suit in corners
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    for (int i=0;i<=2;i++) {
-      g2.drawString(suit, x+(size/13), y+(int)(size/2.7));
-      g2.setTransform(old);
-    }
-
-    // draw the corresponding number of symbols on the card
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    switch (this.cardNum) {
-      case 1: DrawAce(g2, x, y, size, old, this.suit);
-              break;
-      case 2: DrawTwo(g2, x, y, size, old, this.suit);
-              break;
-      case 3: DrawThree(g2, x, y, size, old, this.suit);
-              break;
-      case 4: DrawFour(g2, x, y, size, old, this.suit);
-              break;
-      case 5: DrawFive(g2, x, y, size, old, this.suit);
-              break;
-      case 6: DrawSix(g2, x, y, size, old, this.suit);
-              break;
-      case 7: DrawSeven(g2, x, y, size, old, this.suit);
-              break;
-      case 8: DrawEight(g2, x, y, size, old, this.suit);
-              break;
-      case 9: DrawNine(g2, x, y, size, old, this.suit);
-              break;
-      case 10: DrawTen(g2, x, y, size, old, this.suit);
-              break;
-      case 11: DrawJack(g2, x, y, size, old, this.suit);
-              break;
-      case 12: DrawQueen(g2, x, y, size, old, this.suit);
-              break;
-      case 13: DrawKing(g2, x, y, size, old, this.suit);
-              break;
-    }
+  //draw center of the card (numbers)
+  drawCenterOfTheCard(positionOfTheCardX, positionOfTheCardY);
   }
 
-  // NUMBERS
-
-  public static void DrawAce(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // set font for ace card
-    Font ace = new Font("Serif", Font.PLAIN, (size/2));
-    g2.setFont(ace);
-    g2.setTransform(old);
-
-    g2.drawString(suit, x+(int)(size/3.7), y+(int)(size/1.1));
-
-    // draws "A" in both corners
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    for (int i=0;i<=2;i++) {
-      g2.drawLine(x+(size/7), y+(size/10), x+(size/5), y+(size/5));
-      g2.drawLine(x+(size/7), y+(size/10), x+(size/12), y+(size/5));
-      g2.drawLine(x+(size/9), y+(size/7), x+(size/6), y+(size/7));
-      g2.setTransform(old);
-    }
-  }
-
-  public static void DrawTwo(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // draws "2" in both corners
-    for (int i=0;i<=2;i++) {
-      g2.drawString("2", x+(size/13), y+(int)(size/5));
-      g2.setTransform(old);
-    }
-
-    // set font for "small" (2-10) cards
-    Font small = new Font("Serif", Font.PLAIN, (size/3));
-    g2.setFont(small);
-
-    // draws 2 of given suit
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)    (size/2));
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)(size/2));
-    g2.setTransform(old);
-  }
-
-  public static void DrawThree(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // draws "3" in both corners
-    for (int i=0;i<=2;i++) {
-      g2.drawString("3", x+(size/13), y+(int)(size/5));
-      g2.setTransform(old);
-    }
-
-    // set font for "small" (2-10) cards
-    Font small = new Font("Serif", Font.PLAIN, (size/3));
-    g2.setFont(small);
-
-    // draws 3 of given suit
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)    (size/2));
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)(size/2));
-    g2.setTransform(old);
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)    (size/1.12));    
-  }
-
-  public static void DrawFour(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // draws "4" in both corners
-    for (int i=0;i<=2;i++) {
-      g2.drawString("4", x+(size/13), y+(int)(size/5));
-      g2.setTransform(old);
-    }
-
-    // set font for "small" (2-10) cards
-    Font small = new Font("Serif", Font.PLAIN, (size/3));
-    g2.setFont(small);
-
-    // draws 4 of given suit
     
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.setTransform(old);
+  //draws base of the card (white background)
+  private void drawBaseOfTheCard(Graphics g, int positionOfTheCardX, int positionOfTheCardY) 
+  {
+	  g.setColor(Color.WHITE);
+	  g.fillRect(positionOfTheCardX, positionOfTheCardY, WIDTHOFTHECARD, HEIGHTOFTHECARD);
+  }
+  
+  //corners of the card
+  private void drawCornersOfTheCard(int positionOfTheCardX, int positionOfTheCardY) {
+	  if (this.indexOfTheCard <= 10) 
+	  {
+		  g.drawString((String.valueOf(this.indexOfTheCard)), positionOfTheCardX + (int)(positionOfTheCardX * 0.15), positionOfTheCardY + (int)(positionOfTheCardY * 0.4));
+
+      g.drawString(this.suit, positionOfTheCardX + (int)(positionOfTheCardX * 0.1), positionOfTheCardY + (int)(positionOfTheCardY * 0.7));
+
+      g.setFont(new Font("Serif", Font.PLAIN, -17));
+
+      g.drawString((String.valueOf(this.indexOfTheCard)), positionOfTheCardX + WIDTHOFTHECARD - (int)(positionOfTheCardX * 0.15), positionOfTheCardY + HEIGHTOFTHECARD - (int)(positionOfTheCardY * 0.4));
+
+      g.drawString(this.suit, positionOfTheCardX + WIDTHOFTHECARD - (int)(positionOfTheCardX * 0.1), positionOfTheCardY + HEIGHTOFTHECARD - (int)(positionOfTheCardY * 0.7));
+
+      g.setFont(new Font("Serif", Font.PLAIN, 17));
+	  }
+	  else 
+	  {
+		//...  
+	  }
   }
 
-  public static void DrawFive(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // draws "5" in both corners
-    for (int i=0;i<=2;i++) {
-      g2.drawString("5", x+(size/13), y+(int)(size/5));
-      g2.setTransform(old);
+  //draws center of the card
+  private void drawCenterOfTheCard(int positionOfTheCardX, int positionOfTheCardY)
+  {
+    int indexOfTheCardCPY = this.indexOfTheCard;
+
+    g.setFont(new Font("Serif", Font.PLAIN, 17));
+    if (indexOfTheCardCPY % 2 == 1)
+    {
+      g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2), positionOfTheCardY + HEIGHTOFTHECARD / 2 + (17 / 2));
+
+      indexOfTheCardCPY--;
     }
 
-    // set font for "small" (2-10) cards
-    Font small = new Font("Serif", Font.PLAIN, (size/3));
-    g2.setFont(small);
+    indexOfTheCardCPY /= 2;
 
-    // draws 5 of given suit
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.setTransform(old);
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/2.75), y+(int)(size/1.12)); 
-  }
+    if (indexOfTheCardCPY % 2 == 1)
+    {
+      g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) - (int)(WIDTHOFTHECARD * 0.15), positionOfTheCardY + HEIGHTOFTHECARD / 2 + (17 / 2));
 
-  public static void DrawSix(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-    // draws "6" in both corners
-    for (int i=0;i<=2;i++) {
-      g2.drawString("6", x+(size/13), y+(int)(size/5));
-      g2.setTransform(old);
+      g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) + (int)(WIDTHOFTHECARD * 0.15), positionOfTheCardY + HEIGHTOFTHECARD / 2 + (17 / 2));
+
+      indexOfTheCardCPY--;
     }
 
-    // set font for "small" (2-10) cards
-    Font small = new Font("Serif", Font.PLAIN, (size/3));
-    g2.setFont(small);
+    indexOfTheCardCPY /= 2;
 
-    // draws 6 of given suit
-    g2.rotate(Math.toRadians(180), x + (size/2), y + (size / 4 * 3));
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.setTransform(old);
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/2));
-    g2.drawString(suit, x+(int)(size/5.5), y+(int)(size/1.12)); 
-    g2.drawString(suit, x+(int)(size/1.85), y+(int)(size/1.12)); 
-  }
+    int shiftByY = positionOfTheCardY + HEIGHTOFTHECARD / 2 + (17 / 2);
 
-  public static void DrawSeven(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
+    for (int ctr = 0; ctr < indexOfTheCardCPY; ctr++)
+    {
+        shiftByY += (int)(HEIGHTOFTHECARD * 0.15);
 
-  }
+        g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) - (int)(WIDTHOFTHECARD * 0.15), shiftByY);
 
-  public static void DrawEight(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
+      g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) + (int)(WIDTHOFTHECARD * 0.15), shiftByY);
+    }
 
-  }
+    shiftByY = positionOfTheCardY + HEIGHTOFTHECARD / 2 + (17 / 2);
 
-  public static void DrawNine(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
+    for (int ctr = 0; ctr < indexOfTheCardCPY; ctr++)
+    {
+        shiftByY -= (int)(HEIGHTOFTHECARD * 0.15);
 
-  }
+        g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) - (int)(WIDTHOFTHECARD * 0.15), shiftByY);
 
-  public static void DrawTen(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-
-  }
-
-  public static void DrawJack(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-
-  }
-
-  public static void DrawQueen(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-
-  }
-
-  public static void DrawKing(Graphics2D g2, int x, int y, int size, AffineTransform old, String suit) {
-
-  }
-
-  public String toString() {
-    return "Card: " + this.cardNum + " of " + this.suit;
+      g.drawString(suit, positionOfTheCardX + WIDTHOFTHECARD / 2 - (17 / 2) + (int)(WIDTHOFTHECARD * 0.15), shiftByY);
+    }
   }
 }
