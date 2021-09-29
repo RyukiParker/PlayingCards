@@ -19,6 +19,7 @@ public class FaceCard extends Card {
      */
     private Face face;
 
+    private int suitID;
     DrawingPanel panel;
     /**
      * Constructor For Face Card
@@ -29,6 +30,7 @@ public class FaceCard extends Card {
      */
     public FaceCard(DrawingPanel panel , int cardNum, int suit){
         super(panel.getGraphics(), cardNum, suit);
+        this.suitID = suit;
 
         this.panel = panel;
         switch(cardNum){
@@ -82,12 +84,21 @@ public class FaceCard extends Card {
             g2.setTransform(old);
         }
 
-        // Read and write image
-        BufferedImage img = ImageIO.read(new File("king.png"));
+
+        // Read and draw image
+
+        // Find file based on name and suit
+        String fileName = this.getLetter()+this.suitID;
+        
+        BufferedImage img = ImageIO.read(new File("./img/"+fileName+".png"));
 
         g2.drawImage(img,x+10, y+10, size-20,(size / 2 * 3) -20, panel);
     }
 
+    /**
+    * Get face card letter.
+    * @return The face cards letter
+    */
     public String getLetter(){
         switch(this.face){
             case JACK:
@@ -97,7 +108,7 @@ public class FaceCard extends Card {
             case KING:
                 return "K";
             default:
-                return "X";
+                return "K";
         }
     }
 }
