@@ -11,8 +11,6 @@ class Main {
     Graphics g = panel.getGraphics();
     panel.setBackground(Color.GRAY);
 
-    
-
     // Create deck
     Card[] deck = new Card[52];
     int suit = 0;
@@ -21,9 +19,12 @@ class Main {
         suit = i / 13;
       }
       deck[i] = new Card(g, (i % 13) + 1, suit);
+       Player1 p1 = new Player1(deck[i],panel.getGraphics());
     }
 
     System.out.println(Arrays.asList(deck));
+
+    
 
     // Draw cards on screen
     for(int h=0;h<6;h++) {
